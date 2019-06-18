@@ -5,7 +5,7 @@ session_start();
 require_once 'init.php';
 require_once '../header.php';
 
-echo '<p> Bonjour <em>' . $_SESSION['pseudo'] . '</em> !</p>' ;
+//echo '<p> Bonjour <em>' . $_SESSION['pseudo'] . '</em> !</p>' ;
 
 if( !empty($_POST) ){
                     
