@@ -14,17 +14,17 @@ echo '<h1>Mon super blog !</h1>
         //$id_billet = $_SESSION['id_billet'];
        // echo $id_billet;
 
-        $id_req = $bdd->query("SELECT MAX(id) AS last_id FROM billets");
+        $id_req = $bdd->query("SELECT MAX(id) AS last_id FROM posts");
         $id_max = $id_req->fetch();
         //echo $id_max['last_id'];           
         $id_req->closeCursor();
         if(($id_billet < ($id_max['last_id']+1) ) AND ($id_billet > 0)){
 
 
-                $blog = $bdd->prepare("SELECT id, titre, contenu, auteur, DATE_FORMAT(date_creation, '%d/%m/%Y') AS date_year, DATE_FORMAT(date_creation, '%Hh%imin%ss') AS date_hour FROM billets WHERE id = $id_billet");
+                $blog = $bdd->prepare("SELECT id, title, content, author, DATE_FORMAT(creation_date, '%d/%m/%Y') AS date_year, DATE_FORMAT(creation_date, '%Hh%imin%ss') AS date_hour FROM posts WHERE id = $id_billet");
                             $blog->execute();                       
                             while ($donnees = $blog->fetch()){
-                                echo '<h2>' . $donnees['titre'] . ' </h2><h6>le ' . $donnees['date_year'] . ' à ' . $donnees['date_hour'] . ' article publié par <em>' . $donnees['auteur'] . '</em></h6> <p>' . $donnees['contenu'] . 
+                                echo '<h2>' . $donnees['title'] . ' </h2><h6>le ' . $donnees['date_year'] . ' à ' . $donnees['date_hour'] . ' article publié par <em>' . $donnees['author'] . '</em></h6> <p>' . $donnees['content'] . 
                                         ' </p> <h3>Commentaires</h3>';
                         
                                        
@@ -58,7 +58,7 @@ echo '<h1>Mon super blog !</h1>
                     $billet_id = (int)$id_billet;
                    // Insertion du commentaire à l'aide d'une requête préparée
 
-                  $req = $bdd->prepare("INSERT INTO commentaires (id, id_billet, auteur, commentaire, date_commentaire) VALUES (NULL, $billet_id, '$auteur', '$commentaire', NOW() )");
+                  $req = $bdd->prepare("INSERT INTO comments (id, post_id, author, comment, comment_date) VALUES (NULL, $billet_id, '$auteur', '$commentaire', NOW() )");
 
  /*                  
                     $req->bindParam(':id_billet', $donnees['id']);
@@ -105,10 +105,10 @@ echo '<h1>Mon super blog !</h1>
                 <h2>Autres commentaires :</h2>
             
             ';
-            $comm = $bdd->query("SELECT id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, '%d/%m/%Y') AS date_year, DATE_FORMAT(date_commentaire, '%Hh%imin%ss') AS date_hour FROM commentaires WHERE id_billet = $id_billet ORDER BY id DESC");
+            $comm = $bdd->query("SELECT post_id, author, comment, DATE_FORMAT(comment_date, '%d/%m/%Y') AS date_year, DATE_FORMAT(comment_date, '%Hh%imin%ss') AS date_hour FROM comments WHERE post_id = $id_billet ORDER BY id DESC");
                                                 
                         while ($donnees1 = $comm->fetch()){
-                            echo '<p><strong>' . $donnees1['auteur'] . '</strong>  le ' . $donnees1['date_year'] . ' à ' . $donnees1['date_hour'] . '</p> <p>' . $donnees1['commentaire'] . ' </p>';
+                            echo '<p><strong>' . $donnees1['author'] . '</strong>  le ' . $donnees1['date_year'] . ' à ' . $donnees1['date_hour'] . '</p> <p>' . $donnees1['comment'] . ' </p>';
                     
                                                    
                                                 

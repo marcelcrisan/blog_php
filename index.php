@@ -22,17 +22,17 @@ $start_from = (($page-1) * $results_per_page);
 
 echo '<h1>Mon super blog !</h1>
         <p>Derniers billets du blog :</p>';
-$blog = $bdd->query('SELECT id, titre, contenu, auteur, DATE_FORMAT(date_creation, "%d/%m/%Y") AS date_year, DATE_FORMAT(date_creation, "%Hh%imin%ss") AS date_hour FROM billets ORDER BY id DESC LIMIT '.$start_from.','.$results_per_page.'');
+$blog = $bdd->query('SELECT id, title, content, author, DATE_FORMAT(creation_date, "%d/%m/%Y") AS date_year, DATE_FORMAT(creation_date, "%Hh%imin%ss") AS date_hour FROM posts ORDER BY id DESC LIMIT '.$start_from.','.$results_per_page.'');
                                     
             while ($donnees = $blog->fetch()){
-                echo '<h2>' . $donnees['titre'] . ' </h2><h6>le ' . $donnees['date_year'] . ' à ' . $donnees['date_hour'] . ' article publié par <em>' . $donnees['auteur'] . '</em></h6> <p>' . $donnees['contenu'] . 
+                echo '<h2>' . $donnees['title'] . ' </h2><h6>le ' . $donnees['date_year'] . ' à ' . $donnees['date_hour'] . ' article publié par <em>' . $donnees['author'] . '</em></h6> <p>' . $donnees['content'] . 
                         ' </p> <a href="commentaires.php?id=' . $donnees['id'] . ';" alt="Laissez un commentaire" title="Laissez un commentaire"><em>Commentaires</em></a> ';
                         //$_SESSION['id_billet'] = $donnees['id'];
                          //?id=' . $donnees['id'] . ';         
                          //echo $_SESSION['id_billet'];       
                      }
             $blog->closeCursor();
-$result = $bdd->query('SELECT COUNT(id) AS total FROM billets');
+$result = $bdd->query('SELECT COUNT(id) AS total FROM posts');
 $row = $result->fetch();
 $total_pages = ceil($row["total"] / $results_per_page); // calculate total pages with results
 for ($i=1; $i<=$total_pages; $i++) {// print links for all pages
